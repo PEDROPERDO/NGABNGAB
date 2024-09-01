@@ -1,0 +1,28 @@
+# $ docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag
+
+# $ docker exec -it some-mysql bash
+
+version: '3.9'
+
+services:
+  application:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_DATABASE: "registo"
+      MYSQL_ROOT_PASSWORD: "registoroot"
+      CONTAINER_MYSQL: "mysql_container"
+    restart: on-failure
+    ports:
+      - "8000:8000"
+    depends_on:
+      - "database"
+
+  database:
+    image: "mysql:latest"
+    container_name: "mysql_container"
+    environment:
+      MYSQL_DATABASE: "registo"
+      MYSQL_ROOT_PASSWORD: "registoroot"
+    restart: on-failure
